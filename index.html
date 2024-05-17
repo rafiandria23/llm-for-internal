@@ -11,14 +11,27 @@
     </main>
     <footer>
         <div class="input-container">
-            <input type="text" id="prompt" autocomplete="off" autofocus placeholder="Ask something"></textarea>
+            <input accept="application/pdf" type="file" id="upload" /><input type="text" id="prompt" autocomplete="off" autofocus placeholder="Ask something"></textarea>
         </div>
     </footer>
 
     <script>
+
+
         document.addEventListener('DOMContentLoaded', function () {
 
             const $ = (id) => document.getElementById(id);
+
+            let reference_file = null
+
+            
+
+            $('upload').addEventListener('change', function(e) {
+            // console.log(e.target.files[0])
+            reference_file = new FormData()
+            reference_file.append("file", e.target.files[0])
+
+            }); 
 
             const $div = (cls) => {
                 const el = document.createElement('div');
@@ -69,6 +82,10 @@
 
             $('prompt').addEventListener('keydown', function handleKeyInput(event) {
                 if (event.key === 'Enter') {
+                    if(!reference_file) {
+                        alert("Upload reference file first!")
+                        return
+                    }
                     const el = $('prompt');
                     const question = el.value.trim();
                     if (question.length > 0) {
@@ -133,6 +150,10 @@
             justify-content: center;
             align-items: center;
             flex-direction: row;
+        }
+
+        #upload {
+            width: fit-content;
         }
 
         input,
